@@ -1,47 +1,41 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace X11
-{
-    public enum CloseDownMode: int
-    {
+namespace X11 {
+    public enum CloseDownMode : int {
         DestroyAll = 0,
         RetainPermanent = 1,
         RetainTemporary = 2,
     }
 
 
-
-    public enum Planes: ulong
-    {
+    public enum Planes : ulong {
         AllPlanes = 0xffffffffffffffff,
     }
 
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Screen
-    {
-        IntPtr ext_data;     /* hook for extension to hang data */
-        IntPtr display;/* back pointer to display structure */
-        Window root;            /* Root window id. */
-        int width, height;      /* width and height of screen */
-        int mwidth, mheight;    /* width and height of  in millimeters */
-        int ndepths;            /* number of depths possible */
-        IntPtr depths;          /* list of allowable depths on the screen */
-        int root_depth;         /* bits per pixel */
-        IntPtr root_visual;    /* root visual */
-        IntPtr default_gc;          /* GC for the root root visual */
-        Colormap cmap;          /* default color map */
+    public struct Screen {
+        IntPtr ext_data; /* hook for extension to hang data */
+        IntPtr display; /* back pointer to display structure */
+        Window root; /* Root window id. */
+        int width, height; /* width and height of screen */
+        int mwidth, mheight; /* width and height of  in millimeters */
+        int ndepths; /* number of depths possible */
+        IntPtr depths; /* list of allowable depths on the screen */
+        int root_depth; /* bits per pixel */
+        IntPtr root_visual; /* root visual */
+        IntPtr default_gc; /* GC for the root root visual */
+        Colormap cmap; /* default color map */
         ulong white_pixel;
-        ulong black_pixel;      /* White and Black pixel values */
+        ulong black_pixel; /* White and Black pixel values */
         int max_maps, min_maps; /* max and min color maps */
-        int backing_store;      /* Never, WhenMapped, Always */
+        int backing_store; /* Never, WhenMapped, Always */
         bool save_unders;
         long root_input_mask;
     }
 
-    public partial class Xlib
-    {
+    public partial class Xlib {
         /// <summary>
         /// Initiate a connection to the name X session.
         /// (or respect the DISPLAY environment variable if the display parameter is null).
@@ -145,7 +139,6 @@ namespace X11
         /// <returns>Reference to the default graphics context</returns>
         [DllImport("libX11.so.6")]
         public static extern IntPtr XDefaultGC(IntPtr display, int screen_number);
-
 
 
         /// <summary>
@@ -355,7 +348,12 @@ namespace X11
         public static extern IntPtr XDisplayName(string display);
 
         [DllImport("libX11.so.6")]
-        public static extern int XChangeProperty(IntPtr display, Window window, Atom property, Atom type, int format, int mode, IntPtr data, int nelements);
+        public static extern int XChangeProperty(IntPtr display, Window window, Atom property, Atom type, int format,
+            int mode, IntPtr data, int nelements);
 
+        [DllImport("libX11.so.6")]
+        public static extern int XGetWindowProperty(IntPtr display, Window window, Atom property,
+            long offset, long length, bool delete, Atom type, ref Atom actual,
+            ref int format, ref ulong nelements, ref ulong countRemain, out IntPtr data);
     }
 }
